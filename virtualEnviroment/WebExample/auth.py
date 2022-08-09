@@ -46,6 +46,11 @@ def signup_post():
     if (usernameAlreadyExists(username) or blockchainUrlUsed(url, port) or checkBlockchainConnection(getProvider(url, port))):
         return redirect(url_for('auth.signup'))
 
+    #Check if user has already registered his personal data, if not cannot create an account
+    if (getContractAddress(getProvider(url, port)) == " "):
+        flash("There is no personal data in the provided blockchain. Please, first register your data in your blockchain to be able to create an account")
+        return redirect(url_for('auth.signup'))
+
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
     new_user = User(username=username, password=generate_password_hash(password, method='sha256'), url=url, port=port)
 
