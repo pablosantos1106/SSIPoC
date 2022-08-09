@@ -1,39 +1,12 @@
+<!-- templates/index.html -->
+
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main">
-  <h3 class="title">Set your blockchain</h3>
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-      <div class="notification is-danger">
-          {{ messages[0] }}. 
-      </div>
-  {% endif %}
-  {% endwith %}
-  <form method="POST" action="/">
-    <div class="field">
-        Blockchain url
-        <div class="control">
-            <input class="input is-large" type="text" name="url" placeholder="url" required>
-        </div>
-    </div>
-
-    <div class="field">
-      Blockchain port 
-      <div class="control">
-          <input class="input is-large" type="number" name="port" placeholder="port" required>
-      </div>
-  </div>
-
-  <div class="field">
-    User wallet 
-    <div class="control">
-        <input class="input is-large" type="text" name="wallet" placeholder="wallet" required>
-    </div>
-</div>
-
-    <button class="button is-block is-info is-large is-fullwidth"> Connect Blockchain </button>
-</form>
-</div>
-
+<h1 class="title">
+  Flask Login Example
+</h1>
+<h2 class="subtitle">
+  Easy authentication and authorization in Flask.
+</h2>
 {% endblock %}
