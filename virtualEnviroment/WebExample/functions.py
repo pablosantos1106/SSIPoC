@@ -6,10 +6,8 @@ def usernameAlreadyExists(username):
     
     #checks if username already exists
     user = User.query.filter_by(username=username).first() 
-
     if user:
         flash('Username already exists')
-        print('Uername')
         return True
     return False
 
@@ -23,18 +21,18 @@ def blockchainUrlUsed (url, port):
     if databaseUrl:
         databasePort = User.query.filter_by(port=port).first() 
         if databasePort:
-            flash('This url and port combination is currently in use, please select another')
+            flash('This url and port combination is currently in use by another user, please select another')
             return True
     return False
 
 def getProvider (url, port):
+
     return Web3(Web3.HTTPProvider(url + ':' + port))
 
 def checkBlockchainConnection(provider):
 
-    if not provider.isConnected():
+    if (provider.isConnected() == False):
         flash('Blockchain connection is not posible, please check the url and port input')
-
-
-    return provider.isConnected()
+        
+    return not provider.isConnected()
 

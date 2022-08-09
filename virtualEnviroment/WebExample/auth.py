@@ -14,16 +14,16 @@ def login():
 @auth.route('/login', methods=['POST'])
 def login_post():
     
-    email = request.form.get('email')
+    username = request.form.get('username')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(username=username).first()
 
     # check if user actually exists
     # take the user supplied password, hash it, and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password): 
-        flash('Please check your login details and try again.')
+        flash('Login incorrect: Please check your login details and try again.')
         return redirect(url_for('auth.login')) # if user doesn't exist or password is wrong, reload the page
 
     # if the above check passes, then we know the user has the right credentials
@@ -38,9 +38,9 @@ def signup():
 def signup_post():
 
     # Code to validate and add user to database goes here
-    username = request.form.get('username')
+    username = request.form.get('username').lower()
     password = request.form.get('password')
-    url = request.form.get('url')
+    url = request.form.get('url').lower()
     port = request.form.get('port')
 
     #Check input data
