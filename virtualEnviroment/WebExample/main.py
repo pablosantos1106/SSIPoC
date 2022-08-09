@@ -10,4 +10,5 @@ def index():
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    user =  current_user
+    return render_template('profile.html', userData=user)
