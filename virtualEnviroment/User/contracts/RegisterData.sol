@@ -22,7 +22,20 @@ contract RegisterData {
         string creditCard;
     }
 
+    struct AccessInfo{
+        string name;
+        bool permision;
+        uint256[] access;
+        string[] dataAccessed;
+        uint256 acceptionDate;
+    }
+
     Data internal d;
+
+    AccessInfo[] internal webs;
+    
+    //First id is 1, 0 value is default  in mapping
+    mapping (string => uint) stringToWebIndex;
 
     function setData1(address _wallet, string memory _email, string memory _dni, string memory _name,  string memory _surname, 
                     string memory _gender, uint _birthday, string memory _addr) public {
@@ -41,4 +54,65 @@ contract RegisterData {
     function getData() public view returns (Data memory){
         return d; //retrieve all data Blocks
     }
+
+    function addWeb(string memory _name, string[] memory _dataAccessed) public returns (bool) {
+
+        if (!checkWebRegistered(_name)){
+            uint[] memory access;
+            if (checkEmptyWebs()){
+                // Add genesis webInfo without info (index 0)
+                string[] memory dataAux;
+                webs.push(AccessInfo ("None", false, access, dataAux, 0));
+            }
+            stringToWebIndex[_name] = webs.length;
+            webs.push(AccessInfo (_name, true, access, _dataAccessed, block.timestamp));
+            return true;
+        }
+        return false;
+    }
+
+    function addAccess (string memory _name) public returns (bool){
+
+        if (checkWebRegistered(_name)){
+            if (checkWebConsent(_name)){
+                webs[getWebIndex(_name)].access.push(block.timestamp);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getAccess(string memory _name) public view returns (uint[] memory ){
+        return getWebInfo(_name).access;
+    }
+
+    function getWebInfo(string memory _name) public view returns (AccessInfo memory){
+        uint index = getWebIndex(_name);
+        return webs[index];
+    }
+
+    function getWebIndex(string memory _name) internal view returns (uint) {
+        return stringToWebIndex[_name];
+    }
+
+    function checkEmptyWebs () internal view returns (bool){
+        return  webs.length == 0;
+    }
+
+    function checkWebConsent(string memory _name) public view returns (bool){
+
+        if (checkWebRegistered(_name)){
+            return getWebInfo(_name).permision;
+        }
+        return false;
+    }  
+
+    function checkWebRegistered (string memory _name) public view returns (bool){
+        return getWebIndex(_name) > 0;
+    }
+
+    function getWebsInfo() public view returns (AccessInfo[] memory){
+        return webs;
+    }
 }
+

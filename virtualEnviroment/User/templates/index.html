@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="main">
-  <h3 class="title">Set your blockchain</h3>
+  <h1 class="title">User Web</h1>
   {% with messages = get_flashed_messages() %}
   {% if messages %}
       <div class="notification is-danger">
@@ -11,7 +11,6 @@
   {% endif %}
   {% endwith %}
   <form method="POST" action="/">
-    RPC Server
     <div class="field">
         Url
         <div class="control">

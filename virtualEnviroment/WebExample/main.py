@@ -1,30 +1,43 @@
+from contextlib import redirect_stderr
 from getpass import getuser
-from User.functions import getUserData
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, render_template, session, redirect, url_for, request
 from flask_login import login_required, current_user
 from .functions import *
+
+WEBNAME= "PC SHOP"
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('index.html')
+
+@main.route('/access')
+@login_required
+def access():
+    return render_template('access.html')
+
+
+@main.route('/access', methods=['POST'])
+@login_required
+def access_post():
+
+    session['pk'] = request.form.get('privateKey')
+    return redirect(url_for('main.profile'))
+
 
 @main.route('/profile')
 @login_required
 def profile():
 
-    user =  current_user
-    provider = getProvider(user.url, user.port)
+    provider = getProvider(current_user.url, current_user.port)
 
-    #Search the contract address in user blockchain transactions
-    contractAddress = getContractAddress(provider)
+    #Add data access to user register
+    addWebAcess(provider, session['contractAddress'], session['abi'], WEBNAME, current_user.wallet, session['pk'] )
 
-    session['contractAddress'] = contractAddress
-    session['abi'] = getAbi(getUserWallet(provider))
-    
     #Call getData contract funcion
     userData = mapUserData(getUserData(provider, session['contractAddress'], session['abi']))
-    
-    return render_template('profile.html', user=user, userData=userData)
+
+    return render_template('profile.html', user=current_user, userData=userData)
+
 

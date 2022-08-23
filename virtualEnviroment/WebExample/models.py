@@ -9,4 +9,5 @@ class User(UserMixin, db.Model):
     username = Column(String(40), unique=True, nullable=False)
     url = Column(String(20), nullable=False)
     port = Column(Integer, nullable=False)
+    wallet =  Column(String(30), nullable=False)
     password = Column(String(100), nullable=False)

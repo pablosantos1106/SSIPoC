@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"></h3>
+    <h3 class="title"> The website wants to access this information : </h3>
+    
+    <div class="box">
+        <p> Name </p>
+        <p> Surname </p>
+        <p> Email </p>
+        <p> Dni </p>
+        <p> Birthday Date </p>
+        <p> Address </p>
+    </div>
+
+
+    <form method="POST" action="/consent">
+
+        <div class="box">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <div class="control">
+                <input class="input is-large" type="text" name="privateKey" placeholder="PrivateKey" autofocus="">
+            </div>
+    </div>
+
+        <div class="box">
+                <input type="submit" name="btn" value="Accept" style ="background-color: greenyellow;">
+                <input type="submit" name="btn" value="Deny" style = "background-color: red;">
+        </div>
+    </form>
+
+</div>
+{% endblock %}

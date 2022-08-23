@@ -193,6 +193,24 @@ def mapBlockchainOutput(input):
             "phoneNumber":input[11], "igUsername":input[12], "twUsername":input[13], "creditCard":input[14]}
     return outputMapped
 
+def mapWebInfoOutput(input):
+
+    log = []
+    params = ""
+
+    if (len(input[2]) != 0):
+        for x in input[2]:
+            log.append(datetime.datetime.fromtimestamp(x).date())
+
+    for x in input[3]:
+        params +=  x + ', ' 
+    return  {"name":input[0], "access":input[1], "log":log, "params":params , "date": datetime.datetime.fromtimestamp(input[4]) }
+
+
 def getUserData(w3Provider, contractAddress, abi):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getData().call()
+
+def getWebList(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getWebsInfo().call()

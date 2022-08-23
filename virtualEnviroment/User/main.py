@@ -98,12 +98,12 @@ def registerData_post():
 @main.route('/profile')
 def profile():
     #Get the blockchain provider 
-    w3 = getProvider(session['URL'])
+    w3provider = getProvider(session['URL'])
 
     #Call contract function to get user data
-    userData = mapBlockchainOutput(getData(w3,session ['contractAddress'], session ['abi'] ))
-
-    return render_template("profile.html", userData = userData)
+    userData = mapBlockchainOutput(getData(w3provider,session ['contractAddress'], session ['abi'] ))
+    webInfo = getWebList(w3provider, session['contractAddress'], session['abi'])
+    return render_template("profile.html", userData=userData, webInfo=mapWebInfoOutput(webInfo[1]))
 
 @main.route('/disconnect')
 def disconnect():
