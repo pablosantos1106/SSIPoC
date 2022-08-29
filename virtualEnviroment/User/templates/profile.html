@@ -4,26 +4,58 @@
 <div class="main">
     <h1 class="title"> Welcome, {{userData.name}} {{userData.surname}}! </h1>
     <div class="box">
-        <p> Your wallet address is : {{userData.wallet}}</p>
+        <p> Wallet: {{userData.wallet}}</p>
         <p> Email: {{ userData.email}}</p>
+        <p> Name: {{userData.name}}</p>
+        <p> Surname: {{userData.surname}}</p>
         <p> DNI: {{userData.dni}}  </p>
-        <p> Your birthday is : {{userData.birthday}} </p>
-        <p> Your home address is : {{userData.address}}</p>
+        <p> Gender: {{userData.gender}}</p>
+        <p> Birthday : {{userData.birthday}} </p>
+        <p> Address: {{userData.address}}</p>
         <p> Postal Code: {{userData.postalCode}}</p>
         <p> You live in: {{userData.city}}, {{userData.country}} </p>
         <p> Phonenumber: {{userData.phoneNumber}}</p>
         <p> Your social accounts are: Ig: {{userData.igUsername}} || Tw: {{userData.twUsername}} </p>
-        <p> Your registered credit card number is: {{userData.creditCard}}</p>
+        <p> Credit card number: {{userData.creditCard}}</p>
     </div>
 
     <h1 class="title"> Webs Info </h1>
+    {% for web in webInfo %}
     <div class="box">
-        <p> Name: {{webInfo.name}}</p>
-        <p> Access: {{webInfo.access}}</p>
-        <p> Access Log: {{webInfo.log}}</p>
-        <p> Param Consent: {{webInfo.params}}</p>
-        <p> Access Date: {{webInfo.date}}</p>
+        <p> Name: {{web.name}}</p>
+        <p> Access: {{web.access}}</p>
+        <p> Access Log: {{web.log}}</p>
+        <p> Param Consent: {{web.params}}</p>
+        <p> Access Date: {{web.date}}</p>
     </div>
+    {% endfor %}
+
+
+    <h1 class="title"> Data History </h1>
+    {% for data in dataHistory %}
+    <div class="box">
+        <p> Wallet: {{data.wallet}}</p>
+        <p> Email: {{data.email}}</p>
+        <p> Name: {{data.name}}</p>
+        <p> Surname: {{data.surname}}</p>
+        <p> Dni: {{data.dni}}</p>
+        <p> Gender: {{data.gender}}</p>
+        <p> Birthday: {{data.birthday}}</p>
+        <p> Address: {{data.address}}</p>
+        <p> Postal Code: {{data.postalCode}}</p>
+        <p> City: {{data.city}}</p>
+        <p> Country: {{data.country}}</p>
+        <p> Ig: {{data.igUsername}}</p>
+        <p> Tw: {{data.twUsername}}</p>
+        <p> CardNumber: {{data.creditCard}}</p>
+        <p> Update Date: {{data.updateDate}}</p>
+    </div>
+    {% endfor %}
+
+    <form method="POST" action="/profile">
+        <button class="button is-block is-info is-large is-fullwidth"> Modify Data </button>
+    </form>
+
 </div>
 
 {% endblock %}

@@ -6,6 +6,7 @@ import re
 from solcx import compile_standard, install_solc
 from flask import request, flash
 import datetime
+import time
 
 def validateWallet(provider, wallet):
     if not provider.isAddress(wallet):
@@ -53,6 +54,8 @@ def getProvider (URL):
 
 def getCheckboardValues(values):
     val = []
+    if len(values) == 0:
+        return val
     for x in values:
         if (request.form.get(x) == 'on'):
             val.append(x)
@@ -130,7 +133,7 @@ def deployContract (w3Provider, contractPath, outputPath, chain_id, address, pri
 
     return output
 
-def storeContract (w3Provider, chain_id, contractAddress, abi, userData, privateKey):
+def registerUserData (w3Provider, chain_id, contractAddress, abi, userData, privateKey):
     wallet = userData['wallet']
     nonce = w3Provider.eth.getTransactionCount(wallet)
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
@@ -138,7 +141,7 @@ def storeContract (w3Provider, chain_id, contractAddress, abi, userData, private
     #Set the user data values
     #Create the data block
     setData1 = contact_list.functions.setData1(
-        userData['wallet'],userData['email'],userData['dni'],userData['name'],userData['surname'],userData['gender'],
+        userData['wallet'],userData['email'],userData['dni'],userData['name'],userData['surname'],userData['gender'][0],
         userData['birthday'],userData['addr']
      ).buildTransaction({"chainId": chain_id, "from": wallet, "gasPrice": w3Provider.eth.gas_price, "nonce": nonce})
     
@@ -194,18 +197,22 @@ def mapBlockchainOutput(input):
     return outputMapped
 
 def mapWebInfoOutput(input):
+    output = []
+    if input:
+        for web in input[1:]:
+            log = []
+            params = ""
 
-    log = []
-    params = ""
+            if (web[2]):
+                for x in web[2]:
+                    log.append(datetime.datetime.fromtimestamp(x).date())
 
-    if (len(input[2]) != 0):
-        for x in input[2]:
-            log.append(datetime.datetime.fromtimestamp(x).date())
+            for x in web[3]:
+                params +=  x + ', ' 
 
-    for x in input[3]:
-        params +=  x + ', ' 
-    return  {"name":input[0], "access":input[1], "log":log, "params":params , "date": datetime.datetime.fromtimestamp(input[4]) }
-
+            element = {"name":web[0], "permission":web[1], "access":log, "params":params , "date": datetime.datetime.fromtimestamp(web[4]) }
+            output.append(element)  
+    return output
 
 def getUserData(w3Provider, contractAddress, abi):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
@@ -214,3 +221,56 @@ def getUserData(w3Provider, contractAddress, abi):
 def getWebList(w3Provider, contractAddress, abi):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getWebsInfo().call()
+
+def getDatafromUser ():
+
+    wallet = request.form.get('wallet')
+    email = request.form.get('email')
+    dni= request.form.get('dni')
+    name = request.form.get('name')
+    surname = request.form.get('surname')
+    genderValues = ['Male', 'Female', 'Transgender']
+    gender = getCheckboardValues(genderValues)
+    birthday = datetime.datetime.strptime(request.form.get('birthday'), '%Y-%m-%d')
+    birthday_unix = int(time.mktime(birthday.date().timetuple()))
+    address = request.form.get('address')
+    city = request.form.get('city')
+    postalCode = request.form.get('postalCode')
+    country = request.form.get('country')
+    phoneNumber = request.form.get('phoneNumber')
+    igUsername = request.form.get('igUsername')
+    twUsername = request.form.get('twUsername')
+    creditCard = request.form.get('creditCard')
+
+    return {"wallet": wallet, "email":email, "dni":dni, "name":name, "surname":surname, 
+        "gender":gender, "birthday": birthday_unix, "addr": address, "city":city, "postalCode": postalCode, "country": country, 
+        "phoneNumber":phoneNumber, "igUsername":igUsername, "twUsername":twUsername, "creditCard":creditCard}
+
+def addDataHistory(w3Provider, chain_id, contractAddress, abi, userData, privateKey):
+    wallet = userData['wallet']
+    nonce = w3Provider.eth.getTransactionCount(wallet)
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+
+    transaction = contact_list.functions.saveData().buildTransaction({"chainId": chain_id, "from": wallet, "gasPrice": w3Provider.eth.gas_price, "nonce": nonce})
+    
+    # Sign the transaction
+    signed_transaction = w3Provider.eth.account.sign_transaction(transaction, private_key=privateKey)
+
+    # Send the transaction
+    w3Provider.eth.send_raw_transaction(signed_transaction.rawTransaction)
+
+def getDataHistory(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getHistory().call()
+
+
+def formatHistoryData(history):
+    output = []
+    if history:
+        for x in history:
+            element = {"wallet": x[0][0], "email": x[0][1], "dni":x[0][2], "name":x[0][3], "surname":x[0][4], 
+                "gender":x[0][5], "birthday": datetime.datetime.fromtimestamp(x[0][6]).date(), "address": x[0][7], "city":x[0][8], "postalCode": x[0][9], "country": x[0][10], 
+                "phoneNumber":x[0][11], "igUsername":x[0][12], "twUsername":x[0][13], "creditCard":x[0][14], "updateDate": datetime.datetime.fromtimestamp(x[1])}
+            output.append(element)
+    return output
+

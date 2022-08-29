@@ -5,7 +5,7 @@ from flask_login import login_required, current_user
 from .functions import *
 
 WEBNAME= "PC SHOP"
-
+CHAIN_ID = 1337
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -29,13 +29,13 @@ def access_post():
 @main.route('/profile')
 @login_required
 def profile():
-
+    #Get the user's blockchain provider
     provider = getProvider(current_user.url, current_user.port)
 
-    #Add data access to user register
-    addWebAcess(provider, session['contractAddress'], session['abi'], WEBNAME, current_user.wallet, session['pk'] )
+    #Add web access to user web register
+    addWebAcess(provider, CHAIN_ID, session['contractAddress'], session['abi'], WEBNAME, current_user.wallet, session['pk'] )
 
-    #Call getData contract funcion
+    #Call getData contract funcion to get User's data
     userData = mapUserData(getUserData(provider, session['contractAddress'], session['abi']))
 
     return render_template('profile.html', user=current_user, userData=userData)

@@ -104,11 +104,11 @@ def hasWebConsent (w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.checkWebConsent(webName).call()
 
-def addWebAcess(w3Provider, contractAddress, abi, webName, wallet,privateKey):
+def addWebAcess(w3Provider, CHAIN_ID, contractAddress, abi, webName, wallet, privateKey):
 
     nonce = w3Provider.eth.getTransactionCount(wallet)
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    addWeb = contact_list.functions.addAccess(webName).buildTransaction({"chainId": 1337, "from": wallet, "gasPrice": w3Provider.eth.gas_price, "nonce": nonce})
+    addWeb = contact_list.functions.addAccess(webName).buildTransaction({"chainId": CHAIN_ID, "from": wallet, "gasPrice": w3Provider.eth.gas_price, "nonce": nonce})
 
     # Sign the transaction
     addWebTransaction = w3Provider.eth.account.sign_transaction(addWeb, private_key=privateKey)
@@ -138,4 +138,3 @@ def walletAlreadyExists(wallet):
 def getUserData(w3Provider, contractAddress, abi):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getData().call()
-

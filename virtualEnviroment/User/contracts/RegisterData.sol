@@ -30,29 +30,36 @@ contract RegisterData {
         uint256 acceptionDate;
     }
 
-    Data internal d;
+    struct dataHistory {
+        Data data;
+        uint256 lastUpdate;
+    }
 
+    dataHistory[] internal dHistory;
     AccessInfo[] internal webs;
+    Data  private d;
     
     //First id is 1, 0 value is default  in mapping
     mapping (string => uint) stringToWebIndex;
 
     function setData1(address _wallet, string memory _email, string memory _dni, string memory _name,  string memory _surname, 
                     string memory _gender, uint _birthday, string memory _addr) public {
-        d.wallet = _wallet; d.email = _email; d.dni = _dni; 
-        d.name = _name; d.surname = _surname; d.gender = _gender; 
-        d.birthday = _birthday; d.addr = _addr; 
-    } 
+        d.wallet = _wallet; d.email = _email; d.dni = _dni; d.name = _name; d.surname = _surname; d.gender = _gender;  d.birthday = _birthday; d.addr = _addr;     } 
 
     function setData2 (string memory _city, string memory _postalCode, 
                     string memory _country, string memory _phoneNumber, string memory _ig, string memory _tw, string memory _creditCard) public {
-       d.city = _city; d.postalCode = _postalCode; d.country = _country;
-       d.phoneNumber = _phoneNumber; d.igUsername = _ig; 
-       d.twUsername = _tw; d.creditCard = _creditCard;
-    }
+       d.city = _city; d.postalCode = _postalCode; d.country = _country; d.phoneNumber = _phoneNumber; d.igUsername = _ig;  d.twUsername = _tw; d.creditCard = _creditCard;    }
 
     function getData() public view returns (Data memory){
-        return d; //retrieve all data Blocks
+        return d; //retrieve last user data registered
+    }
+
+    function saveData () public  {
+        dHistory.push(dataHistory(d, block.timestamp));
+    }
+
+    function getHistory() public view returns (dataHistory[] memory) {
+        return dHistory;
     }
 
     function addWeb(string memory _name, string[] memory _dataAccessed) public returns (bool) {
@@ -115,4 +122,3 @@ contract RegisterData {
         return webs;
     }
 }
-
