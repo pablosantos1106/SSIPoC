@@ -78,6 +78,7 @@ def login_post():
     # check if user actually exists
     # take the user supplied password, hash it, and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password): 
+        print("Wowowowow")
         flash('Login incorrect: Please check your login details and try again.')
         return redirect(url_for('auth.login')) # if user doesn't exist or password is wrong, reload the page
     
@@ -85,7 +86,7 @@ def login_post():
 
     contractAddress = getContractAddress(provider)
     session['contractAddress'] = contractAddress
-    session['abi'] = getAbi(getUserWallet(provider))
+    session['abi'] = getAbi(current_user.wallet)
 
     #Check if user has already deployed a contract 
     if not isContractDeployed(provider):

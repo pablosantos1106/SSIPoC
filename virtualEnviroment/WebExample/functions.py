@@ -62,9 +62,6 @@ def getAbi (userWallet):
 
     return json.loads(data["contracts"]["RegisterData.sol"]["RegisterData"]["metadata"])["output"]["abi"]
 
-def getUserWallet(provider):
-    return provider.eth.accounts[0]
-
 def mapUserData(input):
 
     outputMapped = {"email":input[0], "name":input[1], "surname":input[2],  "birthday": datetime.fromtimestamp(input[3]).date() , 
@@ -117,8 +114,6 @@ def addWebAcess(w3Provider, CHAIN_ID, contractAddress, abi, webName, wallet, pri
     w3Provider.eth.send_raw_transaction(addWebTransaction.rawTransaction)
     print("Add " + webName + " access to user's blockchain")
 
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.addAccess(webName).call()
 
 def validateWallet(provider, wallet):
     if not provider.isAddress(wallet):
@@ -135,63 +130,67 @@ def walletAlreadyExists(wallet):
         return True
     return False
 
-def getUserEmail(w3Provider, contractAddress, abi):
+def getUserWallet(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getEmail().call()
+    return contact_list.functions.getWallet(webName).call()
 
-def getUserDni(w3Provider, contractAddress, abi):
+def getUserEmail(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getDni().call()
+    return contact_list.functions.getEmail(webName).call()
 
-def getUserName(w3Provider, contractAddress, abi):
+def getUserDni(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getName().call()
+    return contact_list.functions.getDni(webName).call()
 
-def getUserSurname(w3Provider, contractAddress, abi):
+def getUserName(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getSurname().call()
+    return contact_list.functions.getName(webName).call()
 
-def getUserGender(w3Provider, contractAddress, abi):
+def getUserSurname(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getGender().call()
+    return contact_list.functions.getSurname(webName).call()
 
-def getUserBirthday(w3Provider, contractAddress, abi):
+def getUserGender(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getBirthday().call()
+    return contact_list.functions.getGender(webName).call()
 
-def getUserAddress(w3Provider, contractAddress, abi):
+def getUserBirthday(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getAddress().call()
+    return contact_list.functions.getBirthday(webName).call()
 
-def getUserCity(w3Provider, contractAddress, abi):
+def getUserAddress(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getCity().call()
+    return contact_list.functions.getAddress(webName).call()
 
-def getUserPostalCode(w3Provider, contractAddress, abi):
+def getUserCity(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getPostalCode().call()
+    return contact_list.functions.getCity(webName).call()
 
-def getUserCountry(w3Provider, contractAddress, abi):
+def getUserPostalCode(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getCountry().call()
+    return contact_list.functions.getPostalCode(webName).call()
 
-def getUserPhoneNumber(w3Provider, contractAddress, abi):
+def getUserCountry(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getPhoneNumber().call()
+    return contact_list.functions.getCountry(webName).call()
 
-def getUserIG(w3Provider, contractAddress, abi):
+def getUserPhoneNumber(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getIgUsername().call()
+    return contact_list.functions.getPhoneNumber(webName).call()
 
-def getUserTw(w3Provider, contractAddress, abi):
+def getUserIG(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getTwUsername().call()
+    return contact_list.functions.getIgUsername(webName).call()
 
-def getUserCreditCard(w3Provider, contractAddress, abi):
+def getUserTw(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getCreditCard().call()
+    return contact_list.functions.getTwUsername(webName).call()
 
-def functionParamsCall(UserParams, w3Provider, contractAddress, abi):    
+def getUserCreditCard(w3Provider, contractAddress, abi, webName):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getCreditCard(webName).call()
+
+def functionParamsCall(UserParams, w3Provider, contractAddress, abi, webName):    
     output = []
     paramList = []
     if UserParams:
@@ -199,7 +198,7 @@ def functionParamsCall(UserParams, w3Provider, contractAddress, abi):
             paramList.append('getUser'+ x)
 
     for x in paramList:
-        param = globals() [x] (w3Provider,contractAddress,abi)
+        param = globals() [x] (w3Provider,contractAddress,abi, webName)
         output.append(param)
 
     return output

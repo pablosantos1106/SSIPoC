@@ -38,7 +38,7 @@ def profile():
     addWebAcess(provider, CHAIN_ID, session['contractAddress'], session['abi'], WEBNAME, current_user.wallet, session['pk'] )
 
     #Call getData contract funcion to get User's data
-    userData = mapUserData(functionParamsCall(PARAMSCONSENT,provider, session['contractAddress'], session['abi']))
+    userData = mapUserData(functionParamsCall(PARAMSCONSENT,provider, session['contractAddress'], session['abi'], WEBNAME))
 
     return render_template('profile.html', user=current_user, userData=userData)
 

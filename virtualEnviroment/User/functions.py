@@ -99,7 +99,7 @@ def deployContract (w3Provider, contractPath, outputPath, chain_id, address, pri
     nonce = w3Provider.eth.getTransactionCount(address)
 
     # build transaction
-    transaction = contract.constructor(address, address).buildTransaction(
+    transaction = contract.constructor().buildTransaction(
         {
             "chainId": chain_id,
             "gasPrice": w3Provider.eth.gas_price,
