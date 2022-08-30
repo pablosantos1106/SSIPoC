@@ -4,15 +4,13 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from .functions import *
-
-WEBNAME = "PC SHOP"
-PARAMS = ["name", "surname", "email", "dni", "birthday", "address"]
+from .main import PARAMSCONSENT, WEBNAME
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/consent')
 def consent():
-    return render_template('consent.html')
+    return render_template('consent.html', UserParams = PARAMSCONSENT)
 
 @auth.route('/consent', methods=['POST'])
 def consent_post():
@@ -27,7 +25,7 @@ def consent_post():
             return redirect(url_for('auth.consent'))
         
         #Register consent in user blockchain.
-        addWeb(provider, session['contractAddress'], session['abi'], WEBNAME, PARAMS, 1337, current_user.wallet, privateKey)
+        addWeb(provider, session['contractAddress'], session['abi'], WEBNAME, PARAMSCONSENT, 1337, current_user.wallet, privateKey)
 
         return redirect(url_for('main.profile'))      
     else:

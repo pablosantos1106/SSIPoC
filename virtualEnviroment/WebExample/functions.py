@@ -67,9 +67,9 @@ def getUserWallet(provider):
 
 def mapUserData(input):
 
-    outputMapped = {"wallet":input[0], "email":input[1], "dni":input[2], "name":input[3], "surname":input[4], 
-            "gender":input[5], "birthday": datetime.fromtimestamp(input[6]).date(), "address": input[7], "city":input[8], "postalCode": input[9], "country": input[10], 
-            "phoneNumber":input[11], "igUsername":input[12], "twUsername":input[13], "creditCard":input[14]}
+    outputMapped = {"email":input[0], "name":input[1], "surname":input[2],  "birthday": datetime.fromtimestamp(input[3]).date() , 
+                    "address": input[4], "city":input[5], "postalCode": input[6], "country": input[7], 
+                    "phoneNumber":input[8], "creditCard":input[9]}
     return outputMapped
 
 
@@ -135,6 +135,71 @@ def walletAlreadyExists(wallet):
         return True
     return False
 
-def getUserData(w3Provider, contractAddress, abi):
+def getUserEmail(w3Provider, contractAddress, abi):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getData().call()
+    return contact_list.functions.getEmail().call()
+
+def getUserDni(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getDni().call()
+
+def getUserName(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getName().call()
+
+def getUserSurname(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getSurname().call()
+
+def getUserGender(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getGender().call()
+
+def getUserBirthday(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getBirthday().call()
+
+def getUserAddress(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getAddress().call()
+
+def getUserCity(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getCity().call()
+
+def getUserPostalCode(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getPostalCode().call()
+
+def getUserCountry(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getCountry().call()
+
+def getUserPhoneNumber(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getPhoneNumber().call()
+
+def getUserIG(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getIgUsername().call()
+
+def getUserTw(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getTwUsername().call()
+
+def getUserCreditCard(w3Provider, contractAddress, abi):
+    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
+    return contact_list.functions.getCreditCard().call()
+
+def functionParamsCall(UserParams, w3Provider, contractAddress, abi):    
+    output = []
+    paramList = []
+    if UserParams:
+        for x in UserParams:
+            paramList.append('getUser'+ x)
+
+    for x in paramList:
+        param = globals() [x] (w3Provider,contractAddress,abi)
+        output.append(param)
+
+    return output

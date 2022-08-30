@@ -6,12 +6,9 @@
     <h3 class="title"> The website wants to access this information : </h3>
     
     <div class="box">
-        <p> Name </p>
-        <p> Surname </p>
-        <p> Email </p>
-        <p> Dni </p>
-        <p> Birthday Date </p>
-        <p> Address </p>
+    {%for param in UserParams%}
+    <p> {{param}} </p>
+    {% endfor %}
     </div>
 
 

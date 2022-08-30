@@ -5,6 +5,8 @@ from flask_login import login_required, current_user
 from .functions import *
 
 WEBNAME= "PC SHOP"
+PARAMSCONSENT = ["Email","Name", "Surname","Birthday","Address", "City","PostalCode", "Country", "PhoneNumber", "CreditCard"]
+
 CHAIN_ID = 1337
 main = Blueprint('main', __name__)
 
@@ -36,7 +38,7 @@ def profile():
     addWebAcess(provider, CHAIN_ID, session['contractAddress'], session['abi'], WEBNAME, current_user.wallet, session['pk'] )
 
     #Call getData contract funcion to get User's data
-    userData = mapUserData(getUserData(provider, session['contractAddress'], session['abi']))
+    userData = mapUserData(functionParamsCall(PARAMSCONSENT,provider, session['contractAddress'], session['abi']))
 
     return render_template('profile.html', user=current_user, userData=userData)
 

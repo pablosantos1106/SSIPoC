@@ -37,7 +37,7 @@ contract RegisterData {
 
     dataHistory[] internal dHistory;
     AccessInfo[] internal webs;
-    Data  private d;
+    Data private d;
     
     //First id is 1, 0 value is default  in mapping
     mapping (string => uint) stringToWebIndex;
@@ -50,9 +50,28 @@ contract RegisterData {
                     string memory _country, string memory _phoneNumber, string memory _ig, string memory _tw, string memory _creditCard) public {
        d.city = _city; d.postalCode = _postalCode; d.country = _country; d.phoneNumber = _phoneNumber; d.igUsername = _ig;  d.twUsername = _tw; d.creditCard = _creditCard;    }
 
+
+
     function getData() public view returns (Data memory){
         return d; //retrieve last user data registered
     }
+
+    function getWallet () public view returns (address) {return d.wallet;}
+    function getEmail () public view returns(string memory)  {return d.email;}
+    function getDni () public view returns (string memory)  {return d.dni;}
+    function getName () public view returns (string memory) {return d.name;}
+    function getSurname () public view returns (string memory)  {return d.surname;}
+    function getGender () public view returns (string memory)  {return d.gender;}
+    function getBirthday () public view returns (uint) {return d.birthday;}
+    function getAddress () public view returns (string memory){return d.addr;}
+    function getCity () public view returns (string memory){return d.city;}
+    function getPostalCode () public view returns (string memory) {return d.postalCode;}
+    function getCountry () public view returns(string memory)  {return d.country;}
+    function getPhoneNumber () public view returns (string memory){ return d.phoneNumber;}
+    function getIgUsername ( ) public view returns (string memory) {return d.igUsername;}
+    function getTwUsername () public view returns (string memory){return d.twUsername;}
+    function getCreditCard () public view returns (string memory){return d.creditCard;}
+
 
     function saveData () public  {
         dHistory.push(dataHistory(d, block.timestamp));
