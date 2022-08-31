@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title"> Register PC Shop data access</h3>
+    
+    <form method="POST" action="/access">
+        <div class="box">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification is-danger">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+            {% endwith %}
+            <div class="control">
+                <input class="input is-large" type="text" name="privateKey" placeholder="PrivateKey" autofocus="">
+            </div>
+        </div>
+        <button class="button is-block is-info is-large is-fullwidth">Register</button>
+   </form>
+
+</div>
+{% endblock %}

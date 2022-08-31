@@ -1,15 +1,11 @@
-from contextlib import redirect_stderr
-from getpass import getuser
 from flask import Blueprint, render_template, session, redirect, url_for, request
 from flask_login import login_required, current_user
 from .functions import *
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
 
-WEBNAME= "PC SHOP"
-PARAMSCONSENT = ["Email","Name", "Surname","Birthday","Address", "City","PostalCode", "Country", "PhoneNumber", "CreditCard"]
-
+WEBNAME= "Computer Shop"
+PARAMSCONSENT = ["Email","Name", "Surname", "Gender", "Birthday","Address", "City","PostalCode", "Country", "PhoneNumber", "CreditCard"]
 CHAIN_ID = 1337
+
 main = Blueprint('main', __name__)
 
 @main.route('/')
@@ -25,7 +21,6 @@ def access():
 @main.route('/access', methods=['POST'])
 @login_required
 def access_post():
-
     session['pk'] = request.form.get('privateKey')
     return redirect(url_for('main.profile'))
 

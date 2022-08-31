@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="title"> Welcome, {{user.username}} ! </h1>
+
+<div class="box">
+    <p> Blockchain Url Conection: {{ user.url}}:{{user.port}}</p>
+    <p> User wallet: {{user.wallet}}</p>
+
+
+    <form method="POST" action="/profile">
+        <div class="box">
+            <button class="button is-block is-info is-large is-fullwidth">Change password</button>
+    </div>
+    </form>
+</div>
+
+<div class="box">
+    <p> Email: {{ userData.email}}</p>
+    <p> Dni: {{ userData.dni}}</p>
+    <p> Name: {{userData.name}}</p>
+    <p> Surname: {{userData.surname}}</p>
+    <p> Gender : {{userData.gender}} </p>
+    <p> Birthday : {{userData.birthday}} </p>
+    <p> Phonenumber: {{userData.phoneNumber}}</p>
+</div>
+
+{% endblock %}
+
+
+cd 

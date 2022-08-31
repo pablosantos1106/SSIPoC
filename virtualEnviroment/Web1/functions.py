@@ -1,10 +1,8 @@
-import string
 from .models import User
 from flask import flash
 from web3 import Web3
 import json
 from datetime import datetime
-
 
 def usernameAlreadyExists(username):
     
@@ -64,9 +62,9 @@ def getAbi (userWallet):
 
 def mapUserData(input):
 
-    outputMapped = {"email":input[0], "name":input[1], "surname":input[2],  "birthday": datetime.fromtimestamp(input[3]).date() , 
-                    "address": input[4], "city":input[5], "postalCode": input[6], "country": input[7], 
-                    "phoneNumber":input[8], "creditCard":input[9]}
+    outputMapped = {"email":input[0], "name":input[1], "surname":input[2], "gender":input[3], "birthday": datetime.fromtimestamp(input[4]).date() , 
+                    "address": input[5], "city":input[6], "postalCode": input[7], "country": input[8], 
+                    "phoneNumber":input[9], "creditCard":input[10]}
     return outputMapped
 
 
