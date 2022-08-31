@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<div class="error">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}. 
+        </div>
+    {% endif %}
+    {% endwith %}
+</div>
+
 <div class="main">
     <h1 class="title"> Welcome, {{userData.name}} {{userData.surname}}! </h1>
     <div class="box">

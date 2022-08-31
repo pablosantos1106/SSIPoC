@@ -8,6 +8,7 @@ from flask import request, flash
 import datetime
 import time
 
+
 def validateWallet(provider, wallet):
     if not provider.isAddress(wallet):
         flash('Invalid wallet address: '+ wallet)

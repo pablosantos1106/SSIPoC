@@ -2,14 +2,19 @@
 
 {% block content %}
 <div class="main">
+
   <h1 class="title">User Web</h1>
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-      <div class="notification is-danger">
-          {{ messages[0] }}. 
-      </div>
-  {% endif %}
-  {% endwith %}
+
+  <div class="error">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. 
+            </div>
+        {% endif %}
+        {% endwith %}
+  </div>
+
   <form method="POST" action="/">
     <div class="field">
         Url

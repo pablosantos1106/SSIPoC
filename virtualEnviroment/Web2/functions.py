@@ -31,13 +31,6 @@ def getProvider (url, port):
     path = url + ":" + str(port)
     return Web3(Web3.HTTPProvider(path))
 
-def checkBlockchainConnection(provider):
-
-    if (provider.isConnected() == False):
-        flash('No se ha podido conectar la Blockchain. Por favor, revise los datos introducidos')
-        
-    return not provider.isConnected()
-
 def getContractAddress (provider):
     output = " "
     transactionList = []

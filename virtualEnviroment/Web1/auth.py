@@ -4,7 +4,7 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from .functions import *
-from .main import PARAMSCONSENT, WEBNAME
+from .main import PARAMSCONSENT, WEBNAME, CHAIN_ID
 
 auth = Blueprint('auth', __name__)
 
@@ -16,19 +16,31 @@ def consent():
 def consent_post():
 
     if request.form["btn"]=="Accept":
-
+        
         provider = getProvider(current_user.url, current_user.port)
-        privateKey = request.form.get('privateKey')
-        session['pk'] = privateKey
-        if (len(privateKey) == 0):
+            
+        #Check Blockchain connection
+        if not provider.isConnected():
+            flash("Unable to connect user's blockchain")
+            return redirect(url_for('auth.login'))
+
+        if (len(request.form.get('privateKey')) == 0):
             flash ("Invalid private key, please check this value")
             return redirect(url_for('auth.consent'))
-        
-        #Register consent in user blockchain.
-        addWeb(provider, session['contractAddress'], session['abi'], WEBNAME, PARAMSCONSENT, 1337, current_user.wallet, privateKey)
 
-        return redirect(url_for('main.profile'))      
+        #Save the user privateKey this session to aprove each access to his profile while its loged
+        #This avoids requesting the password every time you access your profile.
+        session['pk'] = request.form.get('privateKey')
+            
+        #Register consent in user blockchain.
+        try:
+            addWeb(provider, session['contractAddress'], session['abi'], WEBNAME, PARAMSCONSENT, CHAIN_ID, current_user.wallet, session['pk'])
+            return redirect(url_for('main.profile'))      
+        except Exception as e:
+            error = "An unexpected error occurred registering web consent in user's blockchain "
+            return render_template("error.html", error=error, details=e)
     else:
+        #If the user denies consent, the user is unlogged.        
         return redirect(url_for('auth.logout'))
 
 @auth.route('/signup')
@@ -38,7 +50,7 @@ def signup():
 @auth.route('/signup', methods=['POST'])
 def signup_post():
 
-    # Code to validate and add user to database goes here
+    #Get user input
     username = request.form.get('username').lower()
     password = request.form.get('password')
     url = request.form.get('url').lower()
@@ -46,20 +58,38 @@ def signup_post():
     wallet = request.form.get('wallet')
 
     #Check input data
-    if (usernameAlreadyExists(username) or blockchainUrlUsed(url, port) or checkBlockchainConnection(getProvider(url, port)) or walletAlreadyExists(wallet)):
+    if (usernameAlreadyExists(username) or blockchainUrlUsed(url, port) or walletAlreadyExists(wallet)):
+        return redirect(url_for('auth.signup'))
+
+    #Check blockchain connection
+    provider = getProvider(url, port)
+    if not provider.isConnected():
+        flash('Blockchain connection is not posible, please check the url and port input')
         return redirect(url_for('auth.signup'))
 
     #Check if user has already registered his personal data, if not cannot create an account
-    if (getContractAddress(getProvider(url, port)) == " "):
-        flash("There is no personal data in the provided blockchain. Please, first register your data in your blockchain to be able to create an account")
-        return redirect(url_for('auth.signup'))
+    try:
+        if (getContractAddress(getProvider(url, port)) == " "):
+            flash("There is no personal data in the provided blockchain. Please, first register your data in your blockchain to be able to create an account")
+            return redirect(url_for('auth.signup'))
+    except Exception as e:
+        error = "An unexpected error occurred checking user contracts "
+        return render_template("error.html", error=error, details=e)
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(username=username, password=generate_password_hash(password, method='sha256'), url=url, port=port, wallet=wallet)
+    try:
+        #Creates new user object
+        new_user = User(username=username, password=generate_password_hash(password, method='sha256'), url=url, port=port, wallet=wallet)
+        
+        # add the new user to the database
+        db.session.add(new_user)
 
-    # add the new user to the database
-    db.session.add(new_user)
-    db.session.commit()
+        #Commit the new user
+        db.session.commit()
+
+    except Exception as e:
+        error = "An unexpected error occurred while creating a new user"
+        return render_template("error.html", error=error, details=e)
 
     return redirect(url_for('auth.login'))
 
@@ -73,35 +103,53 @@ def login_post():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user = User.query.filter_by(username=username).first()
+    try:
+        #Search if user exists in database
+        user = User.query.filter_by(username=username).first()
+    except Exception as e:
+        error = "An unexpected error occurred while searching the user in database"
+        return render_template("error.html", error=error, details=e)
 
-    # check if user actually exists
-    # take the user supplied password, hash it, and compare it to the hashed password in database
+    # Check if user actually exists
+    # Take the user supplied password, hash it, and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password): 
         flash('Login incorrect: Please check your login details and try again.')
         return redirect(url_for('auth.login')) # if user doesn't exist or password is wrong, reload the page
     
-    provider= getProvider(user.url, user.port)
+    provider = getProvider(user.url, user.port)
 
-    contractAddress = getContractAddress(provider)
-    session['contractAddress'] = contractAddress
-    session['abi'] = getAbi(getWallet(provider))
+    if not provider.isConnected(): 
+        flash("Unable to connect user's blockchain")
+        return redirect(url_for('auth.login'))
 
     #Check if user has already deployed a contract 
     if not isContractDeployed(provider):
         flash("There is not user information, please add your info in your blockchain first")
-        redirect('auth.login')  
+        return redirect(url_for('auth.login'))
 
-    # if the above check passes, then we know the user has the right credentials
+    #Get contract info to call the functions
+    try:
+        session['contractAddress'] = getContractAddress(provider)
+        session['abi'] = getAbi(getWallet(provider))
+    except Exception as e:
+        error = "Unable to get user's contract info"
+        return render_template("error.html", error=error, details=e)
+
+    # If the above check passes, then we know the user has the right credentials
     login_user(user)
 
-    #Check if webapp has already regsitered in data consent
-    if not (hasWebConsent(provider, session['contractAddress'],  session['abi'], WEBNAME)):
-        return redirect(url_for('auth.consent'))
-    elif (len(session['pk'])!=0):
-        return redirect(url_for('main.profile'))
-    else:
-        return redirect(url_for('main.access'))
+    #Check if webapp has already registered in data consent
+    try:
+        if not (hasWebConsent(provider, session['contractAddress'],  session['abi'], WEBNAME)):
+            return redirect(url_for('auth.consent'))
+        elif (len(session['pk'])!=0):
+            return redirect(url_for('main.profile'))
+        else:
+            return redirect(url_for('main.access'))
+    except Exception as e:
+        error = "An error occurred when checking the consent of the website"
+        return render_template("error.html", error=error, details=e)
+    
 
 @auth.route('/changePassword')
 @login_required
@@ -117,22 +165,26 @@ def changePassword_post():
     newPw = request.form.get('newPassword')
     repeatedPw = request.form.get('repeatedPassword')
 
-    ## Validate Inputs
+    # Validate Inputs
     if newPw != repeatedPw:
-        flash('La contraseña repetida no coincide, por favor inténtelo de nuevo')
+        flash('Passwords do not match, please review these values and try again')
         return redirect(url_for('main.changePassword'))
 
     if (not check_password_hash(current_user.password, actualPw)):
-        flash('Su contraseña actual no es válida, por favor inténtelo de nuevo')
+        flash('Your current password is invalid, please try again')
         return redirect(url_for('main.changePassword'))
 
-    ## Change the user password
-    user = User.query.filter_by(username=current_user.username).first()
+    # Change the user password
+    try:
+        user = User.query.filter_by(username=current_user.username).first()
+        if user:
+            user.password = generate_password_hash(newPw, method='sha256')
+            db.session.add(user)
+            db.session.commit()
+    except Exception as e:
+        error = "An error occurred while modifying the user's password."
+        return render_template("error.html", error=error, details=e)
 
-    if user:
-        user.password = generate_password_hash(newPw, method='sha256')
-        db.session.add(user)
-        db.session.commit()
     return redirect(url_for('main.profile'))
 
 
