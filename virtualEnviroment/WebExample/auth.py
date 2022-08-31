@@ -78,7 +78,6 @@ def login_post():
     # check if user actually exists
     # take the user supplied password, hash it, and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password): 
-        print("Wowowowow")
         flash('Login incorrect: Please check your login details and try again.')
         return redirect(url_for('auth.login')) # if user doesn't exist or password is wrong, reload the page
     
@@ -86,7 +85,7 @@ def login_post():
 
     contractAddress = getContractAddress(provider)
     session['contractAddress'] = contractAddress
-    session['abi'] = getAbi(current_user.wallet)
+    session['abi'] = getAbi(getWallet(provider))
 
     #Check if user has already deployed a contract 
     if not isContractDeployed(provider):
@@ -103,6 +102,38 @@ def login_post():
         return redirect(url_for('main.profile'))
     else:
         return redirect(url_for('main.access'))
+
+@auth.route('/changePassword')
+@login_required
+def changePassword():
+    return render_template('changePassword.html')
+
+
+@auth.route('/changePassword', methods=['POST'])
+@login_required
+def changePassword_post():
+
+    actualPw = request.form.get('actualPassword')
+    newPw = request.form.get('newPassword')
+    repeatedPw = request.form.get('repeatedPassword')
+
+    ## Validate Inputs
+    if newPw != repeatedPw:
+        flash('La contraseña repetida no coincide, por favor inténtelo de nuevo')
+        return redirect(url_for('main.changePassword'))
+
+    if (not check_password_hash(current_user.password, actualPw)):
+        flash('Su contraseña actual no es válida, por favor inténtelo de nuevo')
+        return redirect(url_for('main.changePassword'))
+
+    ## Change the user password
+    user = User.query.filter_by(username=current_user.username).first()
+
+    if user:
+        user.password = generate_password_hash(newPw, method='sha256')
+        db.session.add(user)
+        db.session.commit()
+    return redirect(url_for('main.profile'))
 
 
 @auth.route('/logout')

@@ -3,6 +3,8 @@ from getpass import getuser
 from flask import Blueprint, render_template, session, redirect, url_for, request
 from flask_login import login_required, current_user
 from .functions import *
+from werkzeug.security import generate_password_hash, check_password_hash
+from . import db
 
 WEBNAME= "PC SHOP"
 PARAMSCONSENT = ["Email","Name", "Surname","Birthday","Address", "City","PostalCode", "Country", "PhoneNumber", "CreditCard"]
@@ -41,5 +43,13 @@ def profile():
     userData = mapUserData(functionParamsCall(PARAMSCONSENT,provider, session['contractAddress'], session['abi'], WEBNAME))
 
     return render_template('profile.html', user=current_user, userData=userData)
+
+
+@main.route('/profile', methods=['POST'])
+@login_required
+def profile_post():
+    return redirect(url_for('auth.changePassword'))
+
+
 
 

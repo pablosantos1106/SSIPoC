@@ -202,3 +202,6 @@ def functionParamsCall(UserParams, w3Provider, contractAddress, abi, webName):
         output.append(param)
 
     return output
+
+def getWallet(provider):
+    return provider.eth.accounts[0]
