@@ -2,32 +2,137 @@
 
 {% block content %}
 
-<h1 class="title"> Welcome, {{user.username}} ! </h1>
+<div class="col-3 mb-5 p-1 text-dark text-center" style="background-color: #ffffff;  border-radius: 15px 50px; border: 5px solid black; box-shadow: 8px 8px grey; margin:auto">  
+    <h2 class="my-3">PROFILE</h2>
+  </div>
 
-<div class="box">
-    <p> Blockchain Url Conection: {{ user.url}}:{{user.port}}</p>
-    <p> User wallet: {{user.wallet}}</p>
+        <div class = "col w-50" style="margin:auto">
+            <div class="card mb-4 w-50" style="margin:auto">
+                <div class="card-body text-center">
+                <img src="/static/profile.png" "
+                    class="rounded-circle " style="width: 150px;">
+                <h3 class="my-3">{{userData.name}} {{userData.surname}}</h3>
+                </div>
+            </div>
+                <form method="POST" action="/profile">
+                <div class="d-flex justify-content-center mb-2 w-50" style="margin:auto" >
+                    <button class="btn btn-primary w-100">Update Password</button>
+                </div>
+                </form>
 
+  
+          <div class="col-md mt-4">
+            <div class="card mb-4 p-4 ">
+              <div class="row">
+                
+                <div class="col-md">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Full Name</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.name}} {{userData.surname}}</p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Gender</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.gender}} </p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Address</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.address}}</p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">City</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.city}}</p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Phone</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.phoneNumber}}</p>
+                    </div>
+                  </div>
+                </div>
+      
+                <div class="col-md">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.email}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Birthday</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.birthday}}</p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Postal Cod.</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.postalCode}}</p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Country</p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.country}}</p>
+                    </div>
+                  </div>
+                  <hr>
+      
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <p class="mb-0">Payment </p>
+                    </div>
+                    <div class="col-sm">
+                      <p class="text-muted mb-0">{{userData.creditCard}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+      
+          </div>
 
-    <form method="POST" action="/profile">
-        <div class="box">
-            <button class="button is-block is-info is-large is-fullwidth">Change password</button>
     </div>
-    </form>
-</div>
 
-<div class="box">
-    <p> Email: {{ userData.email}}</p>
-    <p> Name: {{userData.name}}</p>
-    <p> Surname: {{userData.surname}}</p>
-    <p> Gender : {{userData.gender}} </p>
-    <p> Birthday : {{userData.birthday}} </p>
-    <p> Address: {{userData.address}}</p>
-    <p> Postal Code: {{userData.postalCode}}</p>
-    <p> You live in: {{userData.city}}, {{userData.country}} </p>
-    <p> Phonenumber: {{userData.phoneNumber}}</p>
-    <p> Credit card number: {{userData.creditCard}}</p>
-</div>
 
 {% endblock %}
 

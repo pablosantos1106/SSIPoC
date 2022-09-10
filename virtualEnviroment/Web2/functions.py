@@ -102,7 +102,7 @@ def addWebAcess(w3Provider, CHAIN_ID, contractAddress, abi, webName, wallet, pri
 
     # Send the transaction
     w3Provider.eth.send_raw_transaction(addWebTransaction.rawTransaction)
-    print("Añadido el acceso de " + webName + "a la blockchain")
+    print("Añadido el acceso de " + webName + " a la blockchain")
 
 
 def validateWallet(provider, wallet):
@@ -140,45 +140,17 @@ def getUserSurname(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getSurname(webName).call()
 
-def getUserGender(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getGender(webName).call()
-
 def getUserBirthday(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getBirthday(webName).call()
 
-def getUserAddress(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getAddress(webName).call()
-
-def getUserCity(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getCity(webName).call()
-
-def getUserPostalCode(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getPostalCode(webName).call()
-
-def getUserCountry(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getCountry(webName).call()
-
 def getUserPhoneNumber(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getPhoneNumber(webName).call()
-
-def getUserIG(w3Provider, contractAddress, abi, webName):
+    
+def getUserGender(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getIgUsername(webName).call()
-
-def getUserTw(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getTwUsername(webName).call()
-
-def getUserCreditCard(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getCreditCard(webName).call()
+    return contact_list.functions.getGender(webName).call()
 
 def functionParamsCall(UserParams, w3Provider, contractAddress, abi, webName):    
     output = []
@@ -195,3 +167,9 @@ def functionParamsCall(UserParams, w3Provider, contractAddress, abi, webName):
 
 def getWallet(provider):
     return provider.eth.accounts[0]
+
+def parsePkError(error):
+    if (str(error) == "Non-hexadecimal digit found") or (str(error) == "The private key must be exactly 32 bytes long, instead of 32 bytes."):
+        return "Private key: " + str(error)
+    else: 
+        return str(error)

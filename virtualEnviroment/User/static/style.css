@@ -1,0 +1,17 @@
+html,
+body {
+  height: 100%;
+}
+
+.hero.is-primary {
+  background-color: #ffffff;
+  background-image: url("https://images5.alphacoders.com/691/thumb-1920-691237.png")
+}
+
+#loginCard{
+  background-color: #ffffff;
+  margin: auto;
+  flex: 0 0 auto;
+  width: 60%;
+}
+

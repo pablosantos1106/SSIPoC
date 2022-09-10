@@ -47,8 +47,8 @@ def validateMultipleCheckboxOptions(valueList):
         return False
     return atLeastOneChecked(valueList)
 
-def validateUserInputData (provider, wallet, dni, phoneNumber, creditCard, gender): 
-    return validateDni(dni) and validatePhoneNumber(phoneNumber) and  validateCreditCard(creditCard) and validateMultipleCheckboxOptions(gender) and validateWallet (provider, wallet)
+def validateUserInputData (provider, wallet, dni, phoneNumber, creditCard): 
+    return validateDni(dni) and validatePhoneNumber(phoneNumber) and  validateCreditCard(creditCard) and validateWallet (provider, wallet)
 
 def getProvider (URL):
     return Web3(Web3.HTTPProvider(URL))
@@ -142,7 +142,7 @@ def registerUserData (w3Provider, chain_id, contractAddress, abi, userData, priv
     #Set the user data values
     #Create the data block
     setData1 = contact_list.functions.setData1(
-        userData['wallet'],userData['email'],userData['dni'],userData['name'],userData['surname'],userData['gender'][0],
+        userData['wallet'],userData['email'],userData['dni'],userData['name'],userData['surname'],userData['gender'],
         userData['birthday'],userData['addr']
      ).buildTransaction({"chainId": chain_id, "from": wallet, "gasPrice": w3Provider.eth.gas_price, "nonce": nonce})
     
@@ -154,7 +154,7 @@ def registerUserData (w3Provider, chain_id, contractAddress, abi, userData, priv
 
     #Create the data block
     setData2 = contact_list.functions.setData2(
-        userData['city'],userData['postalCode'],userData['country'], userData['phoneNumber'],userData['igUsername'],userData['twUsername'],userData['creditCard']
+        userData['city'],userData['postalCode'],userData['country'], userData['phoneNumber'],userData['creditCard']
         ).buildTransaction({"chainId": chain_id, "from": wallet, "gasPrice": w3Provider.eth.gas_price, "nonce": nonce+1})
     sign_data2 = w3Provider.eth.account.sign_transaction(setData2, private_key=privateKey)
     w3Provider.eth.send_raw_transaction(sign_data2.rawTransaction)
@@ -194,24 +194,24 @@ def mapBlockchainOutput(input):
 
     outputMapped = {"wallet":input[0], "email":input[1], "dni":input[2], "name":input[3], "surname":input[4], 
             "gender":input[5], "birthday": datetime.datetime.fromtimestamp(input[6]).date(), "address": input[7], "city":input[8], "postalCode": input[9], "country": input[10], 
-            "phoneNumber":input[11], "igUsername":input[12], "twUsername":input[13], "creditCard":input[14]}
+            "phoneNumber":input[11], "creditCard":input[12]}
     return outputMapped
 
 def mapWebInfoOutput(input):
     output = []
     if input:
         for web in input[1:]:
-            log = []
+            logOutput = ""
             params = ""
 
             if (web[2]):
                 for x in web[2]:
-                    log.append(datetime.datetime.fromtimestamp(x).date())
+                    logOutput += "(" + str(datetime.datetime.fromtimestamp(x)) + ")  "  
 
             for x in web[3]:
                 params +=  x + ', ' 
 
-            element = {"name":web[0], "permission":web[1], "access":log, "params":params , "date": datetime.datetime.fromtimestamp(web[4]) }
+            element = {"name":web[0], "permission":web[1], "access":logOutput, "params":params , "date": datetime.datetime.fromtimestamp(web[4]) }
             output.append(element)  
     return output
 
@@ -224,14 +224,12 @@ def getWebList(w3Provider, contractAddress, abi):
     return contact_list.functions.getWebsInfo().call()
 
 def getDatafromUser ():
-
     wallet = request.form.get('wallet')
     email = request.form.get('email')
     dni= request.form.get('dni')
     name = request.form.get('name')
     surname = request.form.get('surname')
-    genderValues = ['Male', 'Female', 'Transgender']
-    gender = getCheckboardValues(genderValues)
+    gender = request.form.get('gender')
     birthday = datetime.datetime.strptime(request.form.get('birthday'), '%Y-%m-%d')
     birthday_unix = int(time.mktime(birthday.date().timetuple()))
     address = request.form.get('address')
@@ -239,13 +237,11 @@ def getDatafromUser ():
     postalCode = request.form.get('postalCode')
     country = request.form.get('country')
     phoneNumber = request.form.get('phoneNumber')
-    igUsername = request.form.get('igUsername')
-    twUsername = request.form.get('twUsername')
     creditCard = request.form.get('creditCard')
 
-    return {"wallet": wallet, "email":email, "dni":dni, "name":name, "surname":surname, 
+    return {"wallet":wallet, "email":email, "dni":dni, "name":name, "surname":surname, 
         "gender":gender, "birthday": birthday_unix, "addr": address, "city":city, "postalCode": postalCode, "country": country, 
-        "phoneNumber":phoneNumber, "igUsername":igUsername, "twUsername":twUsername, "creditCard":creditCard}
+        "phoneNumber":phoneNumber, "creditCard":creditCard}
 
 def addDataHistory(w3Provider, chain_id, contractAddress, abi, userData, privateKey):
     wallet = userData['wallet']
@@ -271,7 +267,12 @@ def formatHistoryData(history):
         for x in history:
             element = {"wallet": x[0][0], "email": x[0][1], "dni":x[0][2], "name":x[0][3], "surname":x[0][4], 
                 "gender":x[0][5], "birthday": datetime.datetime.fromtimestamp(x[0][6]).date(), "address": x[0][7], "city":x[0][8], "postalCode": x[0][9], "country": x[0][10], 
-                "phoneNumber":x[0][11], "igUsername":x[0][12], "twUsername":x[0][13], "creditCard":x[0][14], "updateDate": datetime.datetime.fromtimestamp(x[1])}
+                "phoneNumber":x[0][11], "creditCard":x[0][12], "updateDate": str(datetime.datetime.fromtimestamp(x[1]))}
             output.append(element)
     return output
 
+def parsePkError(error):
+    if (str(error) == "Non-hexadecimal digit found") or (str(error) == "The private key must be exactly 32 bytes long, instead of 32 bytes."):
+        return "Private key: " + str(error)
+    else: 
+        return str(error)

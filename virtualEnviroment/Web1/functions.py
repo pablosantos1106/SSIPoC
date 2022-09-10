@@ -129,10 +129,6 @@ def getUserEmail(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getEmail(webName).call()
 
-def getUserDni(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getDni(webName).call()
-
 def getUserName(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getName(webName).call()
@@ -169,14 +165,6 @@ def getUserPhoneNumber(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getPhoneNumber(webName).call()
 
-def getUserIG(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getIgUsername(webName).call()
-
-def getUserTw(w3Provider, contractAddress, abi, webName):
-    contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
-    return contact_list.functions.getTwUsername(webName).call()
-
 def getUserCreditCard(w3Provider, contractAddress, abi, webName):
     contact_list = w3Provider.eth.contract(address=contractAddress, abi=abi)
     return contact_list.functions.getCreditCard(webName).call()
@@ -196,3 +184,9 @@ def functionParamsCall(UserParams, w3Provider, contractAddress, abi, webName):
 
 def getWallet(provider):
     return provider.eth.accounts[0]
+
+def parsePkError(error):
+    if (str(error) == "Non-hexadecimal digit found") or (str(error) == "The private key must be exactly 32 bytes long, instead of 32 bytes."):
+        return "Private key: " + str(error)
+    else: 
+        return str(error)

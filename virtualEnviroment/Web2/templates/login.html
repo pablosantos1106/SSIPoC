@@ -2,32 +2,44 @@
 
 {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title">Web service example</h3>
-    <h3 class="title">Login</h3>
-    <div class="box">
+    <h3 class="title text-center">Iniciar Sesion</h3>
+    <div class="col mb-3">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="notification is-danger">
+            <div class="notification is-danger text-center">
                 {{ messages[0] }}
             </div>
         {% endif %}
         {% endwith %}
+    </div>
         <form method="POST" action="/login">
-            <div class="field">
-                <div class="control">
-                    <input class="input is-large" type="text" name="username" placeholder="Your Username" autofocus="" required>
+            <div class="form-outline mb-4">
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </svg>                    </span>
+                    <input class="form-control form-control-lg rounded" style = "margin-left: -2px;" type="text" name ="username"  placeholder="Usuario" aria-label="Input group example" aria-describedby="basic-addon1" required>
                 </div>
             </div>
 
-            <div class="field">
-                <div class="control">
-                    <input class="input is-large" type="password" name="password" placeholder="Your Password" required>
+
+            <div class="form-outline mb-4">                
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                          </svg>                    
+                    </span>
+                    <input class="form-control form-control-lg" type="password" style = "margin-left: -2px;" name ="password"  placeholder="Contraseña" aria-label="Input group example" aria-describedby="basic-addon1" required>
                 </div>
             </div>
 
             <button class="button is-block is-info is-large is-fullwidth">Login</button>
         </form>
     </div>
-    Don't have an account, sign up  <a href={{ url_for('auth.signup') }} > here </a>
+    <div class = "text-center">
+        ¿Todavia no tienes una cuenta? Regístrate  <a href={{ url_for('auth.signup') }} > aquí </a> 
+    </div>
 </div>
 {% endblock %}

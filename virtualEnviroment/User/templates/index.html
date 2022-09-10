@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main">
-
-  <h1 class="title">User Web</h1>
-
-  <div class="error">
+    <div class="col-7 text-center mb-4 mt-4 p-0" style="margin:auto; ">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="notification is-danger">
@@ -13,32 +9,60 @@
             </div>
         {% endif %}
         {% endwith %}
-  </div>
+    </div>
 
-  <form method="POST" action="/">
-    <div class="field">
-        Url
-        <div class="control">
-            <input class="input is-large" type="text" name="url" placeholder="url" required>
+    <div class = "card card-4 shadow-lg bg-white rounded" id="loginCard" >
+        <div class = "card-body" >
+            <h2 class="title text-dark text-center mt-3">Connect your blockchain</h2>
+
+            <div class="col-9 text" style = "margin: auto;">
+                <form method="POST" action="/" class="p-0">
+                <div class ="mb-4">
+                    <div class = "mb-4">
+                        <!-- Url -->
+                        <div class="form-outline mb-4">
+                            <h6>Url</h6>
+                            <div class="input-group w-100 justify-content-center ">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                                        <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                        </svg>                    </span>
+                                <input class="form-control form-control-lg rounded" type="text" name ="url"  placeholder="Url" aria-label="Input group example" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+            
+                        <!-- Port -->
+                        <div class="form-outline mb-4">                
+                            <h6>Port</h6>
+                            <div class="input-group w-100 justify-content-center ">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-displayport" viewBox="0 0 16 16">
+                                        <path d="M2.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 1 0V8h10v.5a.5.5 0 0 0 1 0v-1a.5.5 0 0 0-.5-.5h-11Z"/>
+                                        <path d="M1 5a1 1 0 0 0-1 1v3.191a1 1 0 0 0 .553.894l1.618.81a1 1 0 0 0 .447.105H15a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H1Zm0 1h14v4H2.618L1 9.191V6Z"/>
+                                    </svg>                    
+                                </span>
+                                <input class="form-control form-control-lg" type="number" name ="port"  placeholder="Port" aria-label="Input group example" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+            
+                        <!-- Wallet -->
+                        <div class="form-outline mb-5">
+                            <h6>Wallet</h6>
+                            <div class="input-group w-100 justify-content-center ">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
+                                        <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
+                                        </svg>                    
+                                    </span>
+                                <input class="form-control form-control-lg" type="text" name ="wallet"  placeholder="Wallet" aria-label="Input group example" aria-describedby="basic-addon1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-dark btn-lg btn-block w-100" >Connect</button>
+                </div>
+            </div>      
         </div>
     </div>
-
-    <div class="field">
-      Port 
-      <div class="control">
-          <input class="input is-large" type="number" name="port" placeholder="port" required>
-      </div>
-  </div>
-
-  <div class="field">
-    User address 
-    <div class="control">
-        <input class="input is-large" type="text" name="wallet" placeholder="wallet" required>
-    </div>
-</div>
-
-    <button class="button is-block is-info is-large is-fullwidth"> Connect Blockchain </button>
-</form>
-</div>
 
 {% endblock %}

@@ -12,6 +12,11 @@ def index():
 @main.route('/', methods=['POST'])
 def index_post():
 
+    session['URL'] = ''
+    session['abi'] = ''
+    session['contractAddress'] = ""
+    session['output_path'] = ""
+
     #Save the blockchain info in session parameters
     session['URL'] = request.form.get('url') + ':' + request.form.get('port')
     wallet = request.form.get('wallet')
@@ -46,6 +51,7 @@ def registerData():
 @main.route('/registerData', methods=['POST'])
 def registerData_post():
 
+
     #Check blockchain connection
     provider = getProvider(session['URL'])
     if not provider.isConnected():
@@ -57,15 +63,17 @@ def registerData_post():
         data = getDatafromUser()
         privateKey = request.form.get('privateKey')
     except Exception as e:
-        flash (e)
+        flash (str(e))
         return redirect(url_for('main.registerData')) 
 
+
     #Validate Input Data
-    if not validateUserInputData(provider=provider, wallet=data["wallet"], dni=data["dni"], phoneNumber=data["phoneNumber"], creditCard=data["creditCard"], gender=data["gender"]):
+    if not validateUserInputData(provider=provider, wallet=data["wallet"], dni=data["dni"], phoneNumber=data["phoneNumber"], creditCard=data["creditCard"]):
         return redirect(url_for('main.registerData'))
 
     # Set the path to the user contract
     path = 'User/contracts/output/' + data["wallet"]
+
 
     #Create the user output folder
     if not os.path.exists(path):
@@ -76,6 +84,7 @@ def registerData_post():
     session['output_path'] = path
     contract_path = 'User/contracts/RegisterData.sol'
 
+
     #Deploy user contract in blockchain
     try:
         contractInfo = deployContract(provider, contract_path, session['output_path'], CHAIN_ID, data["wallet"], privateKey)
@@ -83,14 +92,17 @@ def registerData_post():
         session ['contractAddress'] = contractInfo[1]
     except Exception as e:
         error = "Error deploying the contract in the blockchain"
-        return render_template("error.html", error=error, details=e)
+        d = parsePkError(e)
+        return render_template("error.html", error=error, details=d)
+
 
     #Storage user data in contract created   
     try:
         registerUserData(w3Provider=provider, chain_id=CHAIN_ID, contractAddress=session ['contractAddress'], abi= session ['abi'], userData= data, privateKey=privateKey)
     except Exception as e:
         error = "Error registering the user's data in the contract"
-        return render_template("error.html", error=error, details=e)
+        d = parsePkError(e)
+        return render_template("error.html", error=error, details=d)
 
     return redirect(url_for('main.profile'))
 
@@ -102,7 +114,7 @@ def profile():
 
     #Check Blockchain connection
     if not provider.isConnected():
-        error = "No se ha podido conectar con la blockchain del usuario"
+        error = "Unable to connect user's blockchain"
         return render_template("lostConnection.html", error=error)
         
     #Call contract function to get user data
@@ -118,6 +130,7 @@ def profile():
     except Exception as e:
         error = "Error getting webs info"
         return render_template("error.html", error=error, details=e)
+
 
     #Call contract function to get modified history data
     try:
@@ -153,7 +166,7 @@ def modify_post():
     privateKey = request.form.get('privateKey')
 
     ## Validate input data 
-    if not validateUserInputData(provider=provider, wallet=data["wallet"], dni=data["dni"], phoneNumber=data["phoneNumber"], creditCard=data["creditCard"], gender=data["gender"]):
+    if not validateUserInputData(provider=provider, wallet=data["wallet"], dni=data["dni"], phoneNumber=data["phoneNumber"], creditCard=data["creditCard"]):
         return redirect(url_for('main.modify'))
 
     #Register data in the history
@@ -161,17 +174,16 @@ def modify_post():
         addDataHistory(w3Provider=provider, chain_id=CHAIN_ID, contractAddress=session ['contractAddress'], abi= session ['abi'], userData= data, privateKey=privateKey)
     except Exception as e:
         error = "Error saving old user's data in blockchain history "
-        return render_template("error.html", error=error, details=e)
-    
+        d = parsePkError(e)
+        return render_template("error.html", error=error, details=d)    
     #Update new data 
     try:
         registerUserData(w3Provider=provider, chain_id=CHAIN_ID, contractAddress=session ['contractAddress'], abi= session ['abi'], userData= data, privateKey=privateKey)
     except Exception as e:
-        error = "Error upadting new user's data"
-        return render_template("error.html", error=error, details=e)
-
+        error = "Error updating new user's data"
+        d = parsePkError(e)
+        return render_template("error.html", error=error, details=d)
     return redirect(url_for('main.profile'))
-
 
 @main.route('/disconnect')
 def disconnect():
@@ -180,4 +192,3 @@ def disconnect():
     session['contractAddress'] = ""
     session['output_path'] = ""
     return redirect(url_for('main.index'))
-

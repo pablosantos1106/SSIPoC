@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.15;
 
-
 contract RegisterData {
 
     struct Data {
@@ -17,8 +16,6 @@ contract RegisterData {
         string postalCode;
         string country;
         string phoneNumber;
-        string igUsername;
-        string twUsername;
         string creditCard;
     }
 
@@ -46,7 +43,7 @@ contract RegisterData {
     AccessInfo[] internal webs;
     Data private d;
     
-    //First id is 1, 0 value is default  in mapping
+    //First id is 1, 0 value is default in mapping
     mapping (string => uint) stringToWebIndex;
 
     function setData1(address _wallet, string memory _email, string memory _dni, string memory _name,  string memory _surname, 
@@ -54,10 +51,9 @@ contract RegisterData {
         require(msg.sender == owner);
         d.wallet = _wallet; d.email = _email; d.dni = _dni; d.name = _name; d.surname = _surname; d.gender = _gender;  d.birthday = _birthday; d.addr = _addr;     } 
 
-    function setData2 (string memory _city, string memory _postalCode, 
-                    string memory _country, string memory _phoneNumber, string memory _ig, string memory _tw, string memory _creditCard) public {
+    function setData2 (string memory _city, string memory _postalCode, string memory _country, string memory _phoneNumber, string memory _creditCard) public {
         require(msg.sender == owner);
-        d.city = _city; d.postalCode = _postalCode; d.country = _country; d.phoneNumber = _phoneNumber; d.igUsername = _ig;  d.twUsername = _tw; d.creditCard = _creditCard;    }
+        d.city = _city; d.postalCode = _postalCode; d.country = _country; d.phoneNumber = _phoneNumber; d.creditCard = _creditCard;    }
 
     // Owner function to get his personal data
     function getData() public view returns (Data memory){
@@ -82,8 +78,6 @@ contract RegisterData {
     function getPostalCode  (string memory _WebName) public view returns (string memory) {require(checkWebConsent(_WebName)); require(checkParameterConsent(_WebName, 'PostalCode')); return d.postalCode;}
     function getCountry  (string memory _WebName) public view returns(string memory)  {require(checkWebConsent(_WebName)); require(checkParameterConsent(_WebName, 'Country')); return d.country;}
     function getPhoneNumber  (string memory _WebName) public view returns (string memory){require(checkWebConsent(_WebName)); require(checkParameterConsent(_WebName, 'PhoneNumber')); return d.phoneNumber;}
-    function getIgUsername  (string memory _WebName) public view returns (string memory) {require(checkWebConsent(_WebName)); require(checkParameterConsent(_WebName, 'IgUsername')); return d.igUsername;}
-    function getTwUsername  (string memory _WebName) public view returns (string memory){require(checkWebConsent(_WebName)); require(checkParameterConsent(_WebName, 'TwUsername')); return d.twUsername;}
     function getCreditCard  (string memory _WebName) public view returns (string memory){require(checkWebConsent(_WebName)); require(checkParameterConsent(_WebName, 'CreditCard')); return d.creditCard;}
 
 
@@ -117,11 +111,6 @@ contract RegisterData {
             }
         }
         return false;
-    }
-
-    function getWebAccess(string memory _Webname) public view returns (uint[] memory ){
-        require(msg.sender == owner);
-        return getWebInfo(_Webname).access;
     }
 
     function getWebParams(string memory _Webname) public view returns (string[] memory ){

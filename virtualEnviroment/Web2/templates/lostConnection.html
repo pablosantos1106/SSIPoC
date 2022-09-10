@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main">
-    <div class="main">
-        Error: {{error}}
+
+<div class="col-8" style= "margin:auto">
+
+    <div class="col-4 mb-3 ml-1 p-3 text-dark text-center" style="background-color: #ffffff;  border-radius: 15px 50px; border: 5px solid black; box-shadow: 8px 8px grey; margin:auto ">  
+        <div class="p-2" style= "margin:auto">
+            <h3 class = "text-center text-uppercase">Error</h3>
+        </div>
     </div>
+
+        <div class="col-9 mb-3 ml-1 p-3 text-dark text-center" style="background-color: #ffffff;  border-radius: 15px 50px; border: 5px solid black; box-shadow: 8px 8px grey; margin:auto ">  
+            <h5 class = "text-center text-uppercase">{{error}}</h5>
+        </div>
+
 </div>
 
 {% endblock %}

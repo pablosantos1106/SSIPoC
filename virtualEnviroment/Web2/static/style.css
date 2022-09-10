@@ -1,0 +1,17 @@
+html,
+body {
+  height: 100%;
+}
+
+.hero.is-primary {
+  background-color: #ffffff;
+  background-image: url("/static/background.jpg")
+}
+
+#loginCard{
+  background-color: #ffffff;
+  margin: auto;
+  flex: 0 0 auto;
+  width: 60%;
+}
+

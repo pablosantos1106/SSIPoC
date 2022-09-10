@@ -3,122 +3,154 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="column is-4 is-offset-4">
 
-    <h3 class="title">Update user data</h3>
+<div class="col-3 mb-3 ml-1 p-1 text-dark text-center" style="background-color: #ffffff;  border-radius: 15px 50px; border: 5px solid black; box-shadow: 8px 8px grey; margin: auto; ">  
+    <h2 class="my-3 text-uppercase">Update Data</h2>
+  </div>
 
-    <div class="error">
+<div class="col-7" style="margin:auto" >
+
+   <div class="error mb-3">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="notification is-danger">
+            <div class="notification is-danger text-center">
                 {{ messages[0] }}. 
             </div>
         {% endif %}
         {% endwith %}
     </div>
 
-    <div class="box">
+    <div class="box" style="background-color: #ffffff;  border-radius: 15px 50px; border: 3px solid black; box-shadow: 8px 8px grey; margin:auto">
 
             <form method="POST" action="/modify">
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="wallet" placeholder="Wallet" autofocus="" required>
-                    </div>
-                </div>
+                <div class="col">
+                    <div class="card-body text-black">
+                    <h3 class="mb-5 text-uppercase text-center">Update personal info</h3>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="email" name="email" placeholder="Email" required>
-                    </div>
-                </div>
+                    <form method="POST" action="/registerData" >
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example1m">Email</label>
+                            <input class="form-control form-control-lg" type="email" name="email" autofocus="" required>
+                        </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="dni" placeholder="Dni" required>
+                            <label class="form-label" for="form3Example1n">Dni</label>
+                            <input class="form-control form-control-lg" type="text" name="dni" autofocus="" required>
+                        </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="name" placeholder="Name" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example1m">Name</label>
+                            <input class="form-control form-control-lg" type="text" name="name" autofocus="" required>
+                        </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example1n">Surname</label>
+                            <input class="form-control form-control-lg" type="text" name="surname" autofocus="" required>
+                        </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="surname" placeholder="Surname" required>
+                    <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+                        <h6 class="mb-0 me-4">Gender: </h6>
+    
+                        <div class="form-check form-check-inline mb-0 me-4">
+                        <input class="form-check-input" type="radio" name="gender" value="Male" />
+                        <label class="form-check-label" for="maleGender">Male</label>
+                        </div>
+    
+                        <div class="form-check form-check-inline mb-0 me-4">
+                        <input class="form-check-input" type="radio" name="gender" value="Female" />
+                        <label class="form-check-label" for="femaleGender">Female</label>
+                        </div>
+    
+                        <div class="form-check form-check-inline mb-0">
+                        <input class="form-check-input" type="radio" name="gender" value="Other" />
+                        <label class="form-check-label" for="otherGender">Other</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    Male <input type="checkbox" name="Male"/>
-                    Female <input type="checkbox" name="Female"/>
-                    Transgender <input type="checkbox" name="Transgender"/>
-                </div>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example8">Birthday</label>
+                        <input class="input is-large" type="date" name="birthday"  min="1970-01-01" max="2004-12-31" placeholder="Birthday">
+                    </div>
+                        
             
-                <div class="field">
-                    <input class="input is-large" type="date" name="birthday"  min="1970-01-01" max="2004-12-31" placeholder="Birthday">
-                </div>
-
-
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="address" placeholder="Address" required >
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example8">Address</label>
+                            <input class="form-control form-control-lg" type="text" name="address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example1n">Postal Code</label>
+                            <input class="form-control form-control-lg" type="text" name="postalCode" required>
+                        </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="city" placeholder="City" required >
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example8">City</label>
+                            <input class="form-control form-control-lg" type="text" name="city" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example1n">Country</label>
+                            <input class="form-control form-control-lg" type="text" name="country" required>
+                        </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="postalCode" placeholder="PostalCode" required >
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example8">PhoneNumber</label>
+                            <input class="form-control form-control-lg" type="number" name="phoneNumber" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example1n">Credit Card</label>
+                            <input class="form-control form-control-lg" type="text" name="creditCard" required>
+                        </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="country" placeholder="Country">
-                    </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class = "input is-large" type="number" name="phoneNumber" placeholder="PhoneNumber">
-                    </div>
-                </div>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="igUsername" placeholder="IgUsername: " required >
-                    </div>
+                    <div class="row ">
+                        <div class="col-md-6">
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example8"> Wallet </label>
+                                <input class="form-control form-control-lg" type="text" name="wallet" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 ">
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="form3Example8">PrivateKey* </label>
+                                <input class="form-control form-control-lg" type="password" name="privateKey" required>
+                            </div>
+                        </div>
+                    </div>                            
                 </div>
+              </div>
+              <label class="form-label mt-2" for="form3Example8">*Your private key will not be stored, its necessary to create the contract</label>
 
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="twUsername" placeholder="TwUsername: ." required >
-                    </div>
-                </div>
-
-                <div class="field">
-                    <div class="control">
-                        <input class="input is-large" type="text" name="creditCard" placeholder="CreditCard" required >
-                    </div>
-                </div>
-
-            </div>
-            
-            <div class="field">
-                <div class="control">
-                    <input class="input is-large" type="text" name="privateKey" placeholder="privatekey" required >
-                </div>
-            </div>
-
-            <button class="button is-block is-info is-large is-fullwidth">Apply changes</button>
+            <button class="button is-block is-info is-large is-fullwidth text-uppercase" style="background-color:black;"> Update </button>
         </form>
     </div>
 </div>

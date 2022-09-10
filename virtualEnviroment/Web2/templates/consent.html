@@ -2,35 +2,49 @@
 
 {% block content %}
 <div class="column is-4 is-offset-4">
-    <h3 class="title"></h3>
-    <h3 class="title"> The website wants to access this information : </h3>
+    <h5 class="title"> Biblioteca solicita acceder a la siguiente información: </h5>
     
-    <div class="box">
-    {%for param in UserParams%}
-    <p> {{param}} </p>
-    {% endfor %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="notification is-danger text-center">
+        {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <div class="mb-2 mt-2 p-2" style="background: rgba(225, 225, 225, .25); border-radius: 20px;">
+            {%for param in UserParams%}
+            <h5 class = "p-1 text-center"> {{param}} </h5>
+            {% endfor %}
     </div>
 
 
     <form method="POST" action="/consent">
 
-        <div class="box">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="notification is-danger">
-                    {{ messages[0] }}
-                </div>
-            {% endif %}
-            {% endwith %}
-            <div class="control">
-                <input class="input is-large" type="text" name="privateKey" placeholder="PrivateKey" autofocus="">
-            </div>
-    </div>
+        <div class="row mb-2 mt-2">
 
-        <div class="box">
-                <input type="submit" name="btn" value="Accept" style ="background-color: greenyellow;">
-                <input type="submit" name="btn" value="Deny" style = "background-color: red;">
+            <div class="form-outline mb-4 mt-2">                
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                          </svg>                    
+                    </span>
+                    <input class="form-control form-control-lg" type = "password" name="privateKey" style = "margin-left: -2px;" placeholder="Clave privada" aria-label="Input group example" aria-describedby="basic-addon1">
+                </div>
+            </div>
         </div>
+
+    <div class="row mt-3">
+        <div class="col-sm ">
+            <button class="btn btn-dark btn-lg btn-block w-100" name="btn" value="Accept" style ="background-color: green;" > Aceptar </button>
+        </div>
+    
+        <div class="col-sm">
+            <button class="btn btn-dark btn-lg btn-block w-100" name="btn" value="Deny" style ="background-color: red" > Denegar </button>
+        </div>
+
+</div>
     </form>
 
 </div>

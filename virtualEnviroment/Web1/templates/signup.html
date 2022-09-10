@@ -4,42 +4,76 @@
 <div class="column is-4 is-offset-4">
     <h3 class="title">Sign Up</h3>
 
-    <div class="box">
+    <div class="row">
         <form method="POST" action="/signup">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div class="notification is-danger">
-                    {{ messages[0] }}
+            <div class="notification is-danger text-center">
+                {{ messages[0] }}
                 </div>
             {% endif %}
             {% endwith %}
-            <div class="field">
-                <div class="control">
-                    <input class="input is-large" type="text" name="username" placeholder="Username" autofocus="" requred>
+
+            <div class="form-outline mb-4">
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                          </svg>                    </span>
+                    <input class="form-control form-control-lg rounded" style = "margin-left: -2px;" type="text" name ="username"  placeholder="Username" aria-label="Input group example" aria-describedby="basic-addon1" required>
                 </div>
             </div>
 
-            <div class="field">
-                <div class="control">
-                    <input class="input is-large" type="password" name="password" placeholder="Password" required>
+
+            <div class="form-outline mb-4">                
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                            <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                          </svg>                    
+                    </span>
+                    <input class="form-control form-control-lg" type="password" style = "margin-left: -2px;" name ="password"  placeholder="Password" aria-label="Input group example" aria-describedby="basic-addon1" required>
                 </div>
             </div>
 
 
-            <div class="field">
-                Blockchain
-                <div class="control">
-                    <input class="input is-large" type="text" name="url" placeholder="Url" autofocus="" required>
-                </div>
-
-                <div class="control">
-                    <input class="input is-large" type="number" name="port" placeholder="Port" autofocus=""required >
-                </div>
-
-                <div class="control">
-                    <input class="input is-large" type="text" name="wallet" placeholder="Wallet" autofocus=""required >
+            <div class="form-outline mb-4">
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link" viewBox="0 0 16 16">
+                            <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                            <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                          </svg>                   
+                         </span>
+                    <input class="form-control form-control-lg rounded" type="text" style = "margin-left: -2px;" name ="url"  placeholder="Url" aria-label="Input group example" aria-describedby="basic-addon1" required>
                 </div>
             </div>
+
+            <!-- Port -->
+            <div class="form-outline mb-4">                
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-usb-micro" viewBox="0 0 16 16">
+                            <path d="M4.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-7Z"/>
+                            <path d="M2.707 4A1 1 0 0 0 2 4.293L.293 6A1 1 0 0 0 0 6.707V11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6.707A1 1 0 0 0 15.707 6L14 4.293A1 1 0 0 0 13.293 4H2.707Zm0 1h10.586L15 6.707V11H1V6.707L2.707 5Z"/>
+                          </svg>             
+                    </span>
+                    <input class="form-control form-control-lg" type="number" style = "margin-left: -2px;" name ="port"  placeholder="Port" aria-label="Input group example" aria-describedby="basic-addon1" required>
+                </div>
+            </div>
+
+            <!-- Wallet -->
+            <div class="form-outline mb-5">
+                <div class="input-group w-100 justify-content-center ">
+                    <span class="input-group-text" id="basic-addon1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet2" viewBox="0 0 16 16">
+                            <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484L5.562 3zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-13z"/>
+                          </svg>                  
+                        </span>
+                    <input class="form-control form-control-lg" type="text"  style = "margin-left: -2px; "name ="wallet"  placeholder="Wallet" aria-label="Input group example" aria-describedby="basic-addon1" required>
+                </div>
+            </div>
+        </div>
 
             <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
         </form>

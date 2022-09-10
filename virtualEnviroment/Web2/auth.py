@@ -38,7 +38,8 @@ def consent_post():
             return redirect(url_for('main.profile'))      
         except Exception as e:
             error = "Ocurrió un error al registrar el consentimiento de la web en la blockchain del usuario"
-            return render_template("error.html", error=error, details=e)
+            d = parsePkError(e)
+            return render_template("error.html", error=error, details=d)   
     else:
         #If the user denies consent, the user is unlogged.        
         return redirect(url_for('auth.logout'))
@@ -84,7 +85,7 @@ def signup_post():
         # add the new user to the database
         db.session.add(new_user)
 
-        #Commit the new user
+        #Commit the changes
         db.session.commit()
 
     except Exception as e:
@@ -99,8 +100,10 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
+
+    session['pk']=""
    
-    username = request.form.get('username')
+    username = request.form.get('username').lower()
     password = request.form.get('password')
 
     try:
@@ -168,11 +171,11 @@ def changePassword_post():
     # Validate Inputs
     if newPw != repeatedPw:
         flash('La contraseña repetida no coincide, por favor inténtelo de nuevo')
-        return redirect(url_for('main.changePassword'))
+        return redirect(url_for('auth.changePassword'))
 
     if (not check_password_hash(current_user.password, actualPw)):
         flash('Su contraseña actual no es válida, por favor inténtelo de nuevo')
-        return redirect(url_for('main.changePassword'))
+        return redirect(url_for('auth.changePassword'))
 
     # Change the user password
     try:

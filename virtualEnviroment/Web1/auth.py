@@ -18,7 +18,7 @@ def consent_post():
     if request.form["btn"]=="Accept":
         
         provider = getProvider(current_user.url, current_user.port)
-            
+        
         #Check Blockchain connection
         if not provider.isConnected():
             flash("Unable to connect user's blockchain")
@@ -38,7 +38,8 @@ def consent_post():
             return redirect(url_for('main.profile'))      
         except Exception as e:
             error = "An unexpected error occurred registering web consent in user's blockchain "
-            return render_template("error.html", error=error, details=e)
+            d = parsePkError(e)
+            return render_template("error.html", error=error, details=d)
     else:
         #If the user denies consent, the user is unlogged.        
         return redirect(url_for('auth.logout'))
@@ -64,7 +65,7 @@ def signup_post():
     #Check blockchain connection
     provider = getProvider(url, port)
     if not provider.isConnected():
-        flash('Blockchain connection is not posible, please check the url and port input')
+        flash('Cannot connect blockchain, please check values and try again')
         return redirect(url_for('auth.signup'))
 
     #Check if user has already registered his personal data, if not cannot create an account
@@ -84,7 +85,7 @@ def signup_post():
         # add the new user to the database
         db.session.add(new_user)
 
-        #Commit the new user
+        #Commit the changes
         db.session.commit()
 
     except Exception as e:
@@ -99,8 +100,10 @@ def login():
 
 @auth.route('/login', methods=['POST'])
 def login_post():
+
+    session['pk']=""
    
-    username = request.form.get('username')
+    username = request.form.get('username').lower()
     password = request.form.get('password')
 
     try:
@@ -113,11 +116,12 @@ def login_post():
     # Check if user actually exists
     # Take the user supplied password, hash it, and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password): 
-        flash('Login incorrect: Please check your login details and try again.')
+        flash(' Please check your login details and try again.')
         return redirect(url_for('auth.login')) # if user doesn't exist or password is wrong, reload the page
     
     provider = getProvider(user.url, user.port)
 
+    #Check if is able to connect user's blockchain
     if not provider.isConnected(): 
         flash("Unable to connect user's blockchain")
         return redirect(url_for('auth.login'))
@@ -135,7 +139,7 @@ def login_post():
         error = "Unable to get user's contract info"
         return render_template("error.html", error=error, details=e)
 
-    # If the above check passes, then we know the user has the right credentials
+    # If the above check passes, the user sign on
     login_user(user)
 
     #Check if webapp has already registered in data consent
@@ -167,12 +171,12 @@ def changePassword_post():
 
     # Validate Inputs
     if newPw != repeatedPw:
-        flash('Passwords do not match, please review these values and try again')
-        return redirect(url_for('main.changePassword'))
+        flash('Passwords do not match, please check these values and try again')
+        return redirect(url_for('auth.changePassword'))
 
     if (not check_password_hash(current_user.password, actualPw)):
         flash('Your current password is invalid, please try again')
-        return redirect(url_for('main.changePassword'))
+        return redirect(url_for('auth.changePassword'))
 
     # Change the user password
     try:

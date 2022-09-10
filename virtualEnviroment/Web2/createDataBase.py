@@ -1,7 +1,7 @@
 from Web2 import db, create_app
 import os
 
-path = os.getcwd() + "/WebExample/db.sqlite"
+path = os.getcwd() + "/Web2/db.sqlite"
 
 if os.path.exists(path):
   os.remove(path)

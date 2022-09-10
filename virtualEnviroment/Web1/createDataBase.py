@@ -1,7 +1,7 @@
 from Web1 import db, create_app, models
 import os
 
-path = os.getcwd() + "/WebExample/db.sqlite"
+path = os.getcwd() + "/Web1/db.sqlite"
 
 if os.path.exists(path):
   os.remove(path)

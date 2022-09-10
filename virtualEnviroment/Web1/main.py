@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, reques
 from flask_login import login_required, current_user
 from .functions import *
 
-WEBNAME= "Computer Shop"
+WEBNAME= "PcShop"
 PARAMSCONSENT = ["Email","Name", "Surname", "Gender", "Birthday","Address", "City","PostalCode", "Country", "PhoneNumber", "CreditCard"]
 CHAIN_ID = 1337
 
@@ -10,7 +10,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return redirect(url_for('auth.login'))
 
 @main.route('/access')
 @login_required
@@ -41,8 +41,9 @@ def profile():
     try:
         addWebAcess(provider, CHAIN_ID, session['contractAddress'], session['abi'], WEBNAME, current_user.wallet, session['pk'] )
     except Exception as e:
-        error = "An error occurred during web registration in the user's blockchain."
-        return render_template("error.html", error=error, details=e)
+        error = "An error has occurred while registering web access in the user's blockchain."
+        d = parsePkError(e)
+        return render_template("error.html", error=error, details=d)
 
     #Call getData contract funcion to get User's data
     try:
