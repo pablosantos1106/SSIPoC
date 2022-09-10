@@ -28,7 +28,7 @@ def validatePhoneNumber(phoneNumber):
     return True
 
 def validateCreditCard (creditCard):
-    pattern = '^[973][0-9]{15}|[973][0-9]{3}-[0-9]{4}-[0-9]{4}-[0-9]{4}$'
+    pattern = '[0-9]{16}'
     if not re.match(pattern, creditCard):
         flash('Invalid credit card:' + creditCard)
         return False 
