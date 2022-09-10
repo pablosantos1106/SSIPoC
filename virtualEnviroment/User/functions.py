@@ -28,27 +28,15 @@ def validatePhoneNumber(phoneNumber):
     return True
 
 def validateCreditCard (creditCard):
-    pattern = '[0-9]{16}|[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$'
+    pattern = '^[973][0-9]{15}|[973][0-9]{3}-[0-9]{4}-[0-9]{4}-[0-9]{4}$'
     if not re.match(pattern, creditCard):
         flash('Invalid credit card:' + creditCard)
         return False 
     return True
 
-def atLeastOneChecked(valueList):
-    if (len(valueList) == 0):
-        flash('Please select at least one value')
-        return False
-    return True
-
-
-def validateMultipleCheckboxOptions(valueList):
-    if (len(valueList) > 1):
-        flash('Please select only one option')
-        return False
-    return atLeastOneChecked(valueList)
 
 def validateUserInputData (provider, wallet, dni, phoneNumber, creditCard): 
-    return validateDni(dni) and validatePhoneNumber(phoneNumber) and  validateCreditCard(creditCard) and validateWallet (provider, wallet)
+    return validateDni(dni) and validatePhoneNumber(phoneNumber) and  validateCreditCard(creditCard) and validateWallet (provider, wallet) 
 
 def getProvider (URL):
     return Web3(Web3.HTTPProvider(URL))
