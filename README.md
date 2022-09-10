@@ -3,7 +3,7 @@ Decentralized Digital Identity proof of concept implemented for degree thesis.
 
 # Requisites
 ---------------------------------------------------------------------
-* Python 3.9.13 or higher
+* Python 3.9.13 or higher installed
 * Windows OS
 * Ganache UI installed
 
@@ -12,7 +12,7 @@ Decentralized Digital Identity proof of concept implemented for degree thesis.
 IMPORTANT: Set the current directory inside virtualEnviroment folder to run the apps
 
 	git clone https://github.com/pablosantos1106/SignUpBlockchain.git    
-	cd virtualEnviroment                                                  #Access to virtual enviroment folder
+	cd SignUpBlockchain/virtualEnviroment                                 #Access to virtual enviroment folder
 	.\Scripts\activate.bat                                                #Run activate file inside Scripts folder
 
 ## Running the User digital identity management system
