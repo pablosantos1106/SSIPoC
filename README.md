@@ -1,4 +1,4 @@
-# SignUpBlockchain
+# SSIPoC
 Decentralized Digital Identity proof of concept implemented for degree thesis. 
 
 # Requisites
